@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Chatbot Home</title>
+    <style>
+        /* 전체적인 스타일링 */
+html {
+    background-color: #fcf0e5;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    justify-content: center;
+}
+body {
+    background-color: #fbfbfb;
+    font-family: Arial, Helvetica, sans-serif;
+    border: 1px solid #dc9c25;
+    margin: 0;
+    padding: 0;
+}
+h1 {
+    margin: 0 0 20px;
+    color: #fbab16;
+}
+p {
+    color: #fbab16;
+}
+
+/* 버튼 스타일링 */
+#start-chat {
+    padding: 10px 20px;
+    background-color: #ffca0a;
+    color: #543702;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+#start-chat:hover {
+    background-color: #fac928;
+}
+img {
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>H! I'm a HealthyCat</h1>
+    <img src="/images/cat.png" alt="A healthycat is here!" width="100px" height="100px">
+    <a id="start-chat" href="/counsel">Start Counselling</a>
+    <p id="caution">:: What I'm saying may be right, meow. ::</p>
+</div>
+</body>
+</html>
