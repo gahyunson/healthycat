@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <link rel="shortcut icon" href="#">
+    <link href="#" rel="shortcut icon">
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>재활냥이의 상담소</title>
-    <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="index.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
 html {
     background-color: #fcf0e5;
@@ -25,7 +25,6 @@ body {
     border: 1px solid #dc9c25;
     margin: 0px auto;
 }
-/* 모바일 기기에서 적용될 스타일 */
 @media screen and (max-width: 800px) {
     body {
         margin: 2% auto;
@@ -42,7 +41,6 @@ body {
         border: 1px dotted #dc9c25;
         border-radius: 5px;
     }
-    /* 입력창 스타일링 */
     #input-window {
         width: 90%;
         margin: 1% auto;
@@ -58,14 +56,12 @@ body {
         min-height: 12px;
     }
 }
-/* web */
 @media screen and (min-width: 800px) {
     body {
         margin-top: 1%;
         width: 32rem;
         height: 43rem;
     }
-    /* 채팅창 스타일링 */
     #chat-window {
         width: 30rem;
         height: 54%;
@@ -138,7 +134,6 @@ h1 {
     color: #fac928;
 }
 
-/* 입력창 스타일링 */
 #question {
     flex: 1;
     margin: 3%;
@@ -158,34 +153,33 @@ h1 {
     cursor: pointer;
     font-size: 16px;
 }
+
     </style>
 </head>
 <body>
 <div class="container">
     <h1 class="title">재활냥이의 상담소</h1>
-    <img src="../images/cat.png" alt="healthycat" width="100px" height="100px">
-    <p id="caution">:: 내가 하는 말은 올바른 정보일 수 있다냥 ::<input type="button" value="i" onclick="guide_window();"></p>
+    <img alt="healthycat" height="100px" src="../images/cat.png" width="100px">
+    <p id="caution">:: 내가 하는 말은 올바른 정보일 수 있다냥 ::<input onclick="guide_window();" type="button" value="i"></p>
 </div>
 
-<form id="chat" method="post">
-    <div id="chat-window">
-        <div class="chat-box">
-            <div class="assistant">냥냥, 불편한게 있으면 말해보세요. 무엇이 불편한가요?</div>
-        </div>
-        <div id="loading-icon" class="loading-icon">
-            <i class="fa fa-spinner fa-spin"></i>
-        </div>
+<div id="chat-window">
+    <div class="chat-box">
+        <div class="assistant">냥냥, 불편한게 있으면 말해보세요. 무엇이 불편한가요?</div>
     </div>
-</form>
-<form action="/counsel" th:object="${chatRequest}" method="post">
+    <div class="loading-icon" id="loading-icon">
+        <i class="fa fa-spinner fa-spin"></i>
+    </div>
+</div>
+<form action="/counsel" method="post" th:object="${chatRequest}">
     <div id="input-window">
-        <input type="text" id="question" name="question" placeholder="수술한 무릎의 뒤쪽이 아파">
+        <input id="question" name="question" placeholder="수술한 무릎의 뒤쪽이 아파" type="text">
         <button id="send-button">전송</button>
     </div>
 </form>
 
-<div class="kakao-ad">
-    <script>
+
+<script>
         function guide_window(){
             window.open("guide.html","Guide",
                         "width=" +window.screen.width/2 + ", height=" + window.screen.height/2 + ", top=" + window.screen.width/2 + ",left=" + window.screen.height/2);
@@ -203,6 +197,9 @@ h1 {
         const messageArea = document.getElementById('chat-window');
         const messageInput = document.getElementById('question');
 
+        let userMessages = [];
+        let assistantMessages = [];
+
         let data;
         const addMessage = async() => {
             const messageElement = document.createElement('div');
@@ -210,32 +207,40 @@ h1 {
             messageElement.innerHTML = `<a>${messageInput.value}</a>`;
             messageArea.appendChild(messageElement);
 
+            userMessages.push(messageInput.value);
+
             scrollToBottom();
             showLoadingIcon();
 
             try {
                 const response = await fetch('http://localhost:8080/counsel', {
                     method: 'POST',
-                    body: JSON.stringify({
-                        question: messageInput.value
-                    }),
                     headers: {
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify({
+                        question: messageInput.value // 전송 데이터
+                    })
                 });
 
                 if (response.ok) {
-                    const data = await response.json();
+                    data = await response.json();
                     console.log("got data:", data);
+                    hideLoadingIcon();
+                    assistantMessages.push(data.assistant);
 
                     const astrologerMessage = document.createElement('div');
                     astrologerMessage.classList.add('assistant');
                     astrologerMessage.innerHTML = `<a>${data.assistant}</a>`;
+
                     const a = document.createElement('a');
                     a.classList.add("assistant");
                     astrologerMessage.appendChild(a);
                     messageArea.appendChild(astrologerMessage);
+
                     scrollToBottom();
+
+                    console.log("Data Complete!!!");
                 } else {
                     console.log("Request failed with status:", response.status);
                 }
@@ -243,22 +248,23 @@ h1 {
                 console.log("error:", error);
                 throw error;
             }
-            hideLoadingIcon();
-
+            console.log("I'm HERE !!! ");
         }
-
-        // 입력 액션
-        const sendButton = document.getElementById('send-button');
-        sendButton.addEventListener('click', addMessage);
-        messageInput.addEventListener('keypress', function(event) {
+    const sendButton = document.getElementById('send-button');
+    sendButton.addEventListener('click', addMessage);
+    messageInput.addEventListener('keypress', function(event) {
         if (event.key === 'Enter') {
-            addMessage();
+            event.preventDefault(); // 기본 엔터 키 동작 막기
+            sendButton.click(); // '전송' 버튼 클릭 시뮬레이션
         }
-        });
-    </script>
-    <ins class="kakao_ad_area" data-ad-unit = "DAN-W0uZcape46fdbHYJ"
-         data-ad-width = "320" data-ad-height = "50"></ins>
-    <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+    });
+
+
+</script>
+<div class="kakao-ad">
+    <ins class="kakao_ad_area" data-ad-height="50"
+         data-ad-unit="DAN-W0uZcape46fdbHYJ" data-ad-width="320"></ins>
+    <script async src="//t1.daumcdn.net/kas/static/ba.min.js" type="text/javascript"></script>
 </div>
 </body>
 </html>

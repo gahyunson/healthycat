@@ -1,18 +1,14 @@
 package com.healthycounsel.healthycat.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class ChatRequest {
     private String question;
 
-    @Override
-    public String toString() {
-        return "ChatRequest{" +
-                "question='" + question + '\'' +
-                '}';
-    }
 }
 

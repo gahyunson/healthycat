@@ -1,0 +1,43 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+application.properties
+
+### not ready ###
+/Users/gahyunson/Programming/Projects/java/healthycat/src/main/java/com/healthycounsel/healthycat/config
+/Users/gahyunson/Programming/Projects/java/healthycat/src/main/java/com/healthycounsel/healthycat/controller/ChatController.java
+/Users/gahyunson/Programming/Projects/java/healthycat/src/main/java/com/healthycounsel/healthycat/controller/CustomBotController.java
+/Users/gahyunson/Programming/Projects/java/healthycat/src/main/java/com/healthycounsel/healthycat/dto/Message.java
+/Users/gahyunson/Programming/Projects/java/healthycat/src/main/java/com/healthycounsel/healthycat/repository
+/Users/gahyunson/Programming/Projects/java/healthycat/src/main/java/com/healthycounsel/healthycat/service/ChatService.java

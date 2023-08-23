@@ -5,7 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class ChatResponse {
-    private String assistant;
+public class Message {
+    private String role;
+    private String content;
 }

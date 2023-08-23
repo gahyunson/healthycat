@@ -1,20 +1,23 @@
 package com.healthycounsel.healthycat.controller;
 import com.healthycounsel.healthycat.dto.ChatRequest;
 import com.healthycounsel.healthycat.dto.ChatResponse;
-import jakarta.servlet.http.HttpServletRequest;
+import com.healthycounsel.healthycat.service.ChatService;
+import com.healthycounsel.healthycat.service.ChatGptService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.nio.charset.Charset;
 
 @Controller
 public class HealthyCatController {
+//    private final ChatService chatService;
+    private final ChatGptService chatGptService;
 
+    public HealthyCatController(ChatGptService chatGptService) {
+//        this.chatService = chatService;
+        this.chatGptService = chatGptService;
+    }
 
     @GetMapping("/counsel")
     public String counselChat() {
@@ -23,16 +26,17 @@ public class HealthyCatController {
 
     @PostMapping("/counsel")
     public ResponseEntity<ChatResponse> chat(ChatRequest chatRequest) {
+        System.out.println("*************"+chatRequest);
         ChatResponse chatResponse = new ChatResponse();
-        chatResponse.setAssistant("1st answer");
-        System.out.println(chatRequest.getQuestion());
-        System.out.println(chatResponse.getAssistant());
+        chatResponse.setAssistant(chatGptService.chatGPTService(chatRequest.getQuestion()));
+        System.out.println(chatResponse+"*************");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location","/counsel");
 
+
+//        return new ResponseEntity<>(chatResponse, headers, HttpStatus.SEE_OTHER);
         return ResponseEntity.ok(chatResponse);
-//        HttpHeaders header = new HttpHeaders();
-//        header.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
-
-//        return new ResponseEntity<>(chatResponse,header,HttpStatus.OK);
+//        return ResponseEntity.status(HttpStatus.OK).body(chatResponse);
 
     }
 
