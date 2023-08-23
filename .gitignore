@@ -35,9 +35,9 @@ build/
 application.properties
 
 ### not ready ###
-/Users/gahyunson/Programming/Projects/java/healthycat/src/main/java/com/healthycounsel/healthycat/config
-/Users/gahyunson/Programming/Projects/java/healthycat/src/main/java/com/healthycounsel/healthycat/controller/ChatController.java
-/Users/gahyunson/Programming/Projects/java/healthycat/src/main/java/com/healthycounsel/healthycat/controller/CustomBotController.java
-/Users/gahyunson/Programming/Projects/java/healthycat/src/main/java/com/healthycounsel/healthycat/dto/Message.java
-/Users/gahyunson/Programming/Projects/java/healthycat/src/main/java/com/healthycounsel/healthycat/repository
-/Users/gahyunson/Programming/Projects/java/healthycat/src/main/java/com/healthycounsel/healthycat/service/ChatService.java
+/src/main/java/com/healthycounsel/healthycat/repository/
+/src/main/java/com/healthycounsel/healthycat/config/
+/src/main/java/com/healthycounsel/healthycat/service/ChatService.java
+/src/main/java/com/healthycounsel/healthycat/controller/ChatController.java
+/src/main/java/com/healthycounsel/healthycat/controller/CustomBotController.java
+/src/main/java/com/healthycounsel/healthycat/dto/Message.java
