@@ -7,7 +7,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class HealthyCatController {
@@ -25,19 +28,20 @@ public class HealthyCatController {
     }
 
     @PostMapping("/counsel")
-    public ResponseEntity<ChatResponse> chat(ChatRequest chatRequest) {
-        System.out.println("*************"+chatRequest);
+    public ResponseEntity<ChatResponse> chat(@RequestBody ChatRequest chatRequest) {
+        System.out.println(chatRequest.getQuestion()+"????????????");
+
         ChatResponse chatResponse = new ChatResponse();
-        chatResponse.setAssistant(chatGptService.chatGPTService(chatRequest.getQuestion()));
-        System.out.println(chatResponse+"*************");
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Location","/counsel");
+//        chatResponse.setAssistant(chatGptService.chatGPTService(chatRequest.getQuestion()));
+        chatResponse.setAssistant("Hello, I'm GPT!");
+        System.out.println(chatResponse);
 
-
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Location","/counsel");
 //        return new ResponseEntity<>(chatResponse, headers, HttpStatus.SEE_OTHER);
-        return ResponseEntity.ok(chatResponse);
-//        return ResponseEntity.status(HttpStatus.OK).body(chatResponse);
 
+//        return ResponseEntity.ok(chatResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(chatResponse);
     }
 
 }

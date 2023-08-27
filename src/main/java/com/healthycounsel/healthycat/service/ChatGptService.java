@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.theokanning.openai.client.OpenAiApi;
 import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.service.OpenAiService;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 import retrofit2.Retrofit;
 
 import java.time.Duration;
-import java.util.List;
 
 import static com.theokanning.openai.service.OpenAiService.*;
 
@@ -36,9 +36,9 @@ public class ChatGptService {
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .build();
         Retrofit retrofit = defaultRetrofit(client, mapper);
-
-        OpenAiApi api = retrofit.create(OpenAiApi.class);
-        OpenAiService service = new OpenAiService(api);
+//
+//        OpenAiApi api = retrofit.create(OpenAiApi.class);
+        OpenAiService service = new OpenAiService(openaiApiKey);
         CompletionRequest completionRequest = CompletionRequest.builder()
                 .prompt(prompt)
                 .model(openaiModel)

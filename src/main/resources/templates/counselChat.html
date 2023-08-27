@@ -154,6 +154,7 @@ h1 {
     font-size: 16px;
 }
 
+
     </style>
 </head>
 <body>
@@ -174,90 +175,99 @@ h1 {
 <form action="/counsel" method="post" th:object="${chatRequest}">
     <div id="input-window">
         <input id="question" name="question" placeholder="수술한 무릎의 뒤쪽이 아파" type="text">
-        <button id="send-button">전송</button>
+        <button id="send-button" type="button">전송</button>
     </div>
 </form>
 
 
 <script>
-        function guide_window(){
-            window.open("guide.html","Guide",
-                        "width=" +window.screen.width/2 + ", height=" + window.screen.height/2 + ", top=" + window.screen.width/2 + ",left=" + window.screen.height/2);
-        }
-        function showLoadingIcon() {
-            document.getElementById('loading-icon').style.display = "block";
-          }
-        function hideLoadingIcon() {
-          document.getElementById('loading-icon').style.display = "none";
-        }
-        function scrollToBottom() {
-            messageArea.scrollTop = messageArea.scrollHeight;
-        }
+    function guide_window(){
+        window.open("guide.html","Guide",
+                    "width=" +window.screen.width/2 + ", height=" + window.screen.height/2 + ", top=" + window.screen.width/2 + ",left=" + window.screen.height/2);
+    }
+    function showLoadingIcon() {
+        document.getElementById('loading-icon').style.display = "block";
+      }
+    function hideLoadingIcon() {
+      document.getElementById('loading-icon').style.display = "none";
+    }
+    function scrollToBottom() {
+        messageArea.scrollTop = messageArea.scrollHeight;
+    }
+    const messageArea = document.getElementById('chat-window');
+    const messageInput = document.getElementById('question');
+    let userMessages = [];
+    let assistantMessages = [];
+    let data;
 
-        const messageArea = document.getElementById('chat-window');
-        const messageInput = document.getElementById('question');
+    function addQuestion() {
+        console.log("adding question");
+        const messageElement = document.createElement('div'); // 각각의 질문마다 새로운 요소 생성
+        messageElement.classList.add('question');
+        messageElement.innerHTML = `<a>${messageInput.value}</a>`;
+        messageArea.appendChild(messageElement);
+        userMessages.push(messageInput.value);
 
-        let userMessages = [];
-        let assistantMessages = [];
+        console.log("userMessages",userMessages);
+        messageInput.value='';
 
-        let data;
-        const addMessage = async() => {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('question');
-            messageElement.innerHTML = `<a>${messageInput.value}</a>`;
-            messageArea.appendChild(messageElement);
+        scrollToBottom();
+        showLoadingIcon();
+    }
 
-            userMessages.push(messageInput.value);
+    function addAnswer() {
+        console.log("adding answer");
+        const astrologerMessage = document.createElement('div'); // 각각의 답변마다 새로운 요소 생성
+        astrologerMessage.classList.add('assistant');
+        astrologerMessage.innerHTML = `<a>${data.assistant}</a>`;
+        const a = document.createElement('a');
+        a.classList.add("assistant");
+        astrologerMessage.appendChild(a);
+        messageArea.appendChild(astrologerMessage);
 
-            scrollToBottom();
-            showLoadingIcon();
+        scrollToBottom();
+    }
 
-            try {
-                const response = await fetch('http://localhost:8080/counsel', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        question: messageInput.value // 전송 데이터
-                    })
-                });
+    const addMessage = async () => {
+        await addQuestion();
 
-                if (response.ok) {
-                    data = await response.json();
-                    console.log("got data:", data);
-                    hideLoadingIcon();
-                    assistantMessages.push(data.assistant);
+        try {
+            const response = await fetch('http://localhost:8080/counsel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    question: userMessages
+                })
+            });
 
-                    const astrologerMessage = document.createElement('div');
-                    astrologerMessage.classList.add('assistant');
-                    astrologerMessage.innerHTML = `<a>${data.assistant}</a>`;
+            if (response.ok) {
+                data = await response.json();
+                console.log("data is",data);
+                assistantMessages.push(data.assistant);
+                console.log("data.assistant is",data.assistant);
 
-                    const a = document.createElement('a');
-                    a.classList.add("assistant");
-                    astrologerMessage.appendChild(a);
-                    messageArea.appendChild(astrologerMessage);
-
-                    scrollToBottom();
-
-                    console.log("Data Complete!!!");
-                } else {
-                    console.log("Request failed with status:", response.status);
-                }
-            } catch (error) {
-                console.log("error:", error);
-                throw error;
+                hideLoadingIcon();
+                await addAnswer();
+            } else {
+                console.log("Request failed with status:", response.status);
             }
-            console.log("I'm HERE !!! ");
+        } catch (error) {
+            console.log("error:", error);
+            throw error;
         }
+    };
+
     const sendButton = document.getElementById('send-button');
     sendButton.addEventListener('click', addMessage);
-    messageInput.addEventListener('keypress', function(event) {
+    messageInput.addEventListener('keypress', function (event) {
         if (event.key === 'Enter') {
             event.preventDefault(); // 기본 엔터 키 동작 막기
             sendButton.click(); // '전송' 버튼 클릭 시뮬레이션
         }
     });
+
 
 
 </script>
